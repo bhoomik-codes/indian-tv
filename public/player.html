@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Player — IndiaStream</title>
+  <meta name="description" content="Watch live Indian television channels on IndiaStream." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="player-page">
+
+  <!-- PLAYER PAGE NAVBAR -->
+  <nav class="player-nav" id="player-nav">
+    <a href="index.html" class="back-btn" id="back-btn" aria-label="Back to home">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      Back
+    </a>
+    <a href="index.html" class="logo" id="player-logo">
+      <span class="logo-icon">▶</span>
+      <span class="logo-text">IndiaStream</span>
+    </a>
+    <div class="player-nav-right">
+      <div class="now-playing-label" id="now-playing-label">
+        <span class="live-dot"></span>
+        <span id="nav-channel-name">Loading...</span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- PLAYER LAYOUT -->
+  <div class="player-layout" id="player-layout">
+
+    <!-- VIDEO PLAYER AREA -->
+    <div class="player-area" id="player-area">
+
+      <!-- Custom Video Player -->
+      <div class="video-wrapper" id="video-wrapper">
+        <video id="video-el" playsinline></video>
+
+        <!-- Buffering Spinner -->
+        <div class="buffering-overlay" id="buffering-overlay">
+          <div class="loader-ring small"></div>
+        </div>
+
+        <!-- Error Overlay -->
+        <div class="player-error-overlay hidden" id="player-error-overlay">
+          <div class="player-error-icon">📡</div>
+          <p class="player-error-msg" id="player-error-msg">Stream unavailable</p>
+          <button class="btn-primary small" id="retry-stream-btn">Retry</button>
+        </div>
+
+        <!-- Controls Overlay -->
+        <div class="controls-overlay" id="controls-overlay">
+
+          <!-- Top Bar -->
+          <div class="controls-top" id="controls-top">
+            <div class="channel-info-bar">
+              <div class="channel-logo-sm" id="channel-logo-sm">
+                <img id="ctrl-logo-img" src="" alt="" onerror="this.style.display='none'; document.getElementById('ctrl-logo-fallback').style.display='flex'" />
+                <div class="logo-fallback" id="ctrl-logo-fallback" style="display:none;"></div>
+              </div>
+              <div class="channel-meta">
+                <span class="ctrl-channel-name" id="ctrl-channel-name">Channel Name</span>
+                <div class="live-tag">
+                  <span class="live-dot"></span>
+                  LIVE
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Center Play/Pause -->
+          <div class="controls-center" id="controls-center">
+            <button class="center-play-btn" id="center-play-btn" aria-label="Play/Pause">
+              <svg class="icon-play" width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              <svg class="icon-pause hidden" width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+            </button>
+          </div>
+
+          <!-- Bottom Controls -->
+          <div class="controls-bottom" id="controls-bottom">
+            <!-- Live Progress Bar -->
+            <div class="progress-container" id="progress-container">
+              <div class="progress-track">
+                <div class="progress-fill" id="progress-fill"></div>
+                <div class="live-pulse-dot"></div>
+              </div>
+              <span class="live-label">LIVE</span>
+            </div>
+
+            <!-- Control Buttons Row -->
+            <div class="controls-row">
+              <div class="controls-left-btns">
+                <!-- Play/Pause -->
+                <button class="ctrl-btn" id="play-pause-btn" aria-label="Play/Pause">
+                  <svg class="icon-play" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                  <svg class="icon-pause hidden" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                </button>
+
+                <!-- Volume Controls -->
+                <div class="volume-group" id="volume-group">
+                  <button class="ctrl-btn" id="mute-btn" aria-label="Mute/Unmute">
+                    <svg class="icon-vol" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                      <path d="M15.54 8.46a5 5 0 0 1 0 7.07" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      <path d="M19.07 4.93a10 10 0 0 1 0 14.14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <svg class="icon-muted hidden" width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                      <line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                      <line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                  </button>
+                  <div class="volume-slider-wrap">
+                    <input type="range" id="volume-slider" class="volume-slider" min="0" max="100" value="80" aria-label="Volume" />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Buttons -->
+              <div class="controls-right-btns">
+                <!-- Fullscreen -->
+                <button class="ctrl-btn" id="fullscreen-btn" aria-label="Fullscreen">
+                  <svg class="icon-fullscreen" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <polyline points="8 3 3 3 3 8"/><polyline points="21 8 21 3 16 3"/>
+                    <polyline points="3 16 3 21 8 21"/><polyline points="16 21 21 21 21 16"/>
+                  </svg>
+                  <svg class="icon-exit-fullscreen hidden" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                    <polyline points="4 14 10 14 10 20"/><polyline points="20 10 14 10 14 4"/>
+                    <polyline points="10 14 3 21"/><polyline points="14 10 21 3"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Controls Overlay -->
+      </div>
+      <!-- End Video Wrapper -->
+
+    </div>
+    <!-- End Player Area -->
+
+    <!-- SIDEBAR -->
+    <aside class="channel-sidebar" id="channel-sidebar">
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">Channels</h2>
+        <div class="sidebar-search-wrap">
+          <input type="text" id="sidebar-search" class="sidebar-search" placeholder="Search..." autocomplete="off" />
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+      </div>
+
+      <!-- Category Tabs -->
+      <div class="sidebar-tabs" id="sidebar-tabs" role="tablist">
+        <button class="sidebar-tab active" data-cat="all" role="tab" id="tab-all">All</button>
+        <!-- More tabs injected by JS -->
+      </div>
+
+      <!-- Channel List -->
+      <div class="sidebar-channel-list" id="sidebar-channel-list">
+        <div class="sidebar-loading">
+          <div class="loader-ring small"></div>
+          <span>Loading channels...</span>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+  <!-- End Player Layout -->
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.7/dist/hls.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/player.js"></script>
+</body>
+</html>

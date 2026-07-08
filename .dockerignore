@@ -1,0 +1,29 @@
+# ─── Build Context ─────────────────────────────────────────────────────────────
+# Keep the Docker build context small and clean
+
+# Version control
+.git
+.gitignore
+
+# Editor / OS junk
+.kilocode
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+*~
+
+# Secrets (never bake .env into the image)
+.env
+
+# Runtime artefacts — these live in volumes, not the image
+logs/
+public/working.m3u
+
+# Python cache
+__pycache__
+*.py[cod]
+*.pyo
+
+# Node (if ever added)
+node_modules/
